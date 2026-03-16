@@ -1,0 +1,50 @@
+// Prisma schema for Nia Realtors
+// Database: Postgres (set DATABASE_URL in your environment)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Development {
+  id            Int      @id @default(autoincrement())
+  slug          String   @unique
+  name          String
+  location      String
+  region        String
+  status        String
+  startingPrice Int
+  currency      String
+  description   String
+  featuredImage String
+  bedsSummary   String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  units Unit[]
+}
+
+model Unit {
+  id                 Int      @id @default(autoincrement())
+  slug               String   @unique
+  title              String
+  propertyType       String
+  bedrooms           Int
+  bathrooms          Int
+  isEnsuite          Boolean  @default(false)
+  sizeSqm            Int?
+  floorNumber        Int?
+  price              Int
+  currency           String
+  availabilityStatus String
+  description        String?
+
+  development   Development @relation(fields: [developmentId], references: [id])
+  developmentId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
